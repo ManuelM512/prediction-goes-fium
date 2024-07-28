@@ -89,7 +89,7 @@ def pre_proc(dataset_name):
     race_df = races[["raceId", "year", "round", "circuitId"]].copy()
     # "(...) before 1981, the cars in F1 are drastically different from today."
     race_df = race_df[race_df["year"] >= 1982]
-
+    results_df = results_df[(results_df["positionOrder"] < 21) & (results_df["positionOrder"] > 0)]
     res_df = results_df[
         ["raceId", "driverId", "constructorId", "grid", "positionOrder"]
     ].copy()
@@ -97,5 +97,6 @@ def pre_proc(dataset_name):
     df = feature_engineering(df)
     df_final = df.drop(labels=["raceId"], axis=1)
     df_final = df_final.dropna()
+    df_final = df_final
     df_final.to_csv(f"./model_datasets/{dataset_name}")
     return df_final

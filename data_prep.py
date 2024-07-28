@@ -1,8 +1,10 @@
 import pandas as pd
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 import mlflow
 from dataset_prep import pre_proc
+import numpy as np
 
 mlflow.set_tracking_uri(uri="http://127.0.0.1:8080")
 # mlflow server --host 127.0.0.1 --port 8080
@@ -31,16 +33,19 @@ def train(dataset_name):
     ]
     df = pre_proc(dataset_name)
     X, y = model_train_test(df, features)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Start an MLflow run
     with mlflow.start_run():
         mnb = MultinomialNB()
-        mnb.fit(X, y)
+        mnb.fit(X_train, y_train)
         # Log the model
+        accuracy = mnb.score(X_test, y_test)
+        mlflow.log_metric("accuracy", accuracy)
 
         model_info = mlflow.sklearn.log_model(mnb, "mnb_first")
 
-    return model_info
+    return mnb
 
 
 def pretty_printer(pred_data, driver_ids):
@@ -50,7 +55,7 @@ def pretty_printer(pred_data, driver_ids):
     merged_df = pd.merge(driver_ids_df, driver_info, on="driverId", how="inner")
     merged_df["driverName"] = merged_df["forename"] + " " + merged_df["surname"]
     final_df = pd.concat([merged_df.reset_index(drop=True), pred_df], axis=1)
-    final_df = final_df[["driverId", "driverName", "result"]]
+    final_df = final_df[["driverId", "driverName", "result"]].sort_values(by="result")
 
     print(final_df)
     return final_df
@@ -166,13 +171,38 @@ def get_complementary_data(data: dict):
     return data
 
 
+def predict_unique(mnb, df):
+    # Predict probabilities for the test set
+    probabilities = mnb.predict_proba(df)
+
+    # To ensure unique predictions, we will assign the most likely positionOrders
+    # without repeating them.
+    unique_position_orders = list(range(1, 21))
+    predictions = []
+
+    # Iterate through each sample's predicted probabilities
+    for i, prob in enumerate(probabilities):
+        # Sort class probabilities in descending order
+        top_classes = np.argsort(prob)[::-1]
+        # Find the first available unique positionOrder
+        for cls in top_classes:
+            if cls + 1 in unique_position_orders:
+                predictions.append(cls + 1)
+                unique_position_orders.remove(cls + 1)
+                break
+
+    # Check the predictions
+    return predictions
+
+
 def predictor():
     # Load the model back for predictions as a generic Python Function model
-    loaded_model = mlflow.pyfunc.load_model(train("mnb_first").model_uri)
+    loaded_model = train("mnb_first")
     data = get_complementary_data(get_data())
     driver_ids = data["driverId"]
     df = pd.DataFrame(data)
-    pred = loaded_model.predict(df)
+    # pred = loaded_model.predict(df)
+    pred = predict_unique(loaded_model, df)
     final_df = pretty_printer(pred, driver_ids)
 
     return final_df
