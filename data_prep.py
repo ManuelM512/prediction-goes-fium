@@ -114,7 +114,7 @@ def predictor():
     circuit_id = 13
     driver_ids = [
         1,
-        50,
+        830,
         847,
         852,
         815,
@@ -126,7 +126,7 @@ def predictor():
         848,
         822,
         807,
-        76,
+        825,
         839,
         842,
         844,
@@ -169,11 +169,28 @@ def predictor():
         "grid": numbers,
     }
 
+    # Create a DataFrame from the list of driver IDs
+    driver_ids_df = pd.DataFrame(driver_ids, columns=['driverId'])
+    # Load the driver information dataset into a DataFrame
+    driver_info = pd.read_csv("./datasets/drivers.csv")  # Update with the actual path to the CSV file
+    # Merge the DataFrame with driver IDs and the driver information DataFrame
+    merged_df = pd.merge(driver_ids_df, driver_info, on='driverId', how='inner')
+    # Create a new column 'driverName' by concatenating 'forename' and 'surname'
+    merged_df['driverName'] = merged_df['forename'] + ' ' + merged_df['surname']
+
+
+
     df = pd.DataFrame(data)
 
     pred = loaded_model.predict(df)
+    pred_df = pd.DataFrame(pred, columns=["result"])
 
-    print(pred)
+    # Concatenate the results DataFrame with the merged DataFrame
+    final_df = pd.concat([merged_df.reset_index(drop=True), pred_df], axis=1)
+
+    # Filter the resulting DataFrame to include only 'driverId', 'driverName', and 'result'
+    final_df = final_df[['driverId', 'driverName', 'result']]
+    print(final_df)
 
 
 predictor()
