@@ -88,6 +88,7 @@ def pre_proc():
 # TODO: Refactor, move functions and shorten them
 # TODO: Function to get top 3, driver performance ... from the dataset
 
+
 def train():
     features = ["year", "round", "circuitId", "driverId", "constructorId", "grid", "Top 3 Finish", "Driver Top 3 Finish Percentage (Last Year)", "Constructor Top 3 Finish Percentage (Last Year)", ]
     df = pre_proc()
