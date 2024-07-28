@@ -38,7 +38,7 @@ def train(dataset_name):
         mnb.fit(X, y)
         # Log the model
 
-        model_info = mlflow.sklearn.log_model("first_mnb", "model_rf")
+        model_info = mlflow.sklearn.log_model(mnb, "mnb_first")
 
     return model_info
 
@@ -126,7 +126,7 @@ def get_complementary_data(data: dict):
     driver_ids = data["driverId"]
     year = data["year"][0]
     constructor_ids = data["constructorId"]
-    ch_round = data["round"][0]
+    # ch_round = data["round"][0]
 
     results_df = pd.read_csv("./datasets/results.csv")
     races_df = pd.read_csv("./datasets/races.csv")
@@ -165,13 +165,11 @@ def get_complementary_data(data: dict):
 
     return data
 
-print(get_complementary_data(get_data()))
-
 
 def predictor():
     # Load the model back for predictions as a generic Python Function model
-    loaded_model = mlflow.pyfunc.load_model(train().model_uri)
-    data = get_data()
+    loaded_model = mlflow.pyfunc.load_model(train("mnb_first").model_uri)
+    data = get_complementary_data(get_data())
     driver_ids = data["driverId"]
     df = pd.DataFrame(data)
     pred = loaded_model.predict(df)
@@ -180,4 +178,4 @@ def predictor():
     return final_df
 
 
-# predictor()
+predictor()
