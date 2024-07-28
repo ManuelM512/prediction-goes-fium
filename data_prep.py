@@ -1,11 +1,13 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, explained_variance_score
 import mlflow
 import random
+import numpy as np
 
 mlflow.set_tracking_uri(uri="http://127.0.0.1:8080")
+# mlflow server --host 127.0.0.1 --port 8080
 
 
 def load_datasets():
@@ -122,8 +124,29 @@ def train():
         y_pred = rf_regressor.predict(X_test).astype(int)
 
         # Log metrics
-        accuracy = accuracy_score(y_test, y_pred)
-        mlflow.log_metric("accuracy", accuracy)
+        # Calculate metrics
+        mae = mean_absolute_error(y_test, y_pred)
+        mse = mean_squared_error(y_test, y_pred)
+        rmse = np.sqrt(mse)
+        r2 = r2_score(y_test, y_pred)
+        explained_variance = explained_variance_score(y_test, y_pred)
+
+        # Number of observations and predictors
+        n = len(y_test)
+        k = X.shape[1]  # Number of predictors
+
+        # Calculate Adjusted R-squared
+        adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - k - 1)
+
+        # Log metrics using mlflow
+        mlflow.log_metric("Mean Absolute Error - MAE", mae)
+        mlflow.log_metric("Mean Squared Error - MSE", mse)
+        mlflow.log_metric("Root Mean Squared Error - RMSE", rmse)
+        mlflow.log_metric("R-squared - R2", r2)
+        mlflow.log_metric("Adjusted R-squared - R2_adj", adjusted_r2)
+        mlflow.log_metric("Explained Variance Score", explained_variance)
+
+
 
         # Log the model
         model_info = mlflow.sklearn.log_model(rf_regressor, "model_rf")
@@ -141,7 +164,7 @@ def predictor():
     circuit_id = 13
     driver_ids = [
         1,
-        50,
+        830,
         847,
         852,
         815,
@@ -153,7 +176,7 @@ def predictor():
         848,
         822,
         807,
-        76,
+        825,
         839,
         842,
         844,
@@ -184,10 +207,8 @@ def predictor():
         117,
     ]
     # Create a list of integers from 1 to 20
-    numbers = list(range(1, 21))
+    numbers = [3,11,6, 20, 2, 13, 5, 18, 19, 4, 10, 14, 16, 17, 9, 12, 1, 7, 15, 8]
 
-    # Shuffle the list to get a random order
-    random.shuffle(numbers)
     # Create the dataset
     data = {
         "year": [year] * len(driver_ids),
@@ -198,11 +219,28 @@ def predictor():
         "grid": numbers,
     }
 
+    # Create a DataFrame from the list of driver IDs
+    driver_ids_df = pd.DataFrame(driver_ids, columns=['driverId'])
+    # Load the driver information dataset into a DataFrame
+    driver_info = pd.read_csv("./datasets/drivers.csv")  # Update with the actual path to the CSV file
+    # Merge the DataFrame with driver IDs and the driver information DataFrame
+    merged_df = pd.merge(driver_ids_df, driver_info, on='driverId', how='inner')
+    # Create a new column 'driverName' by concatenating 'forename' and 'surname'
+    merged_df['driverName'] = merged_df['forename'] + ' ' + merged_df['surname']
+
+
+
     df = pd.DataFrame(data)
 
     pred = loaded_model.predict(df)
+    pred_df = pd.DataFrame(pred, columns=["result"])
 
-    print(pred)
+    # Concatenate the results DataFrame with the merged DataFrame
+    final_df = pd.concat([merged_df.reset_index(drop=True), pred_df], axis=1)
+
+    # Filter the resulting DataFrame to include only 'driverId', 'driverName', and 'result'
+    final_df = final_df[['driverId', 'driverName', 'result']]
+    print(final_df)
 
 
 predictor()
