@@ -159,8 +159,6 @@ def predictor():
     # Create a list of integers from 1 to 20
     numbers = [3,11,6, 20, 2, 13, 5, 18, 19, 4, 10, 14, 16, 17, 9, 12, 1, 7, 15, 8]
 
-    # Shuffle the list to get a random order
-    random.shuffle(numbers)
     # Create the dataset
     data = {
         "year": [year] * len(driver_ids),
