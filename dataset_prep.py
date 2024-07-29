@@ -89,7 +89,9 @@ def pre_proc(dataset_name):
     race_df = races[["raceId", "year", "round", "circuitId"]].copy()
     # "(...) before 1981, the cars in F1 are drastically different from today."
     race_df = race_df[race_df["year"] >= 1982]
-    results_df = results_df[(results_df["positionOrder"] < 21) & (results_df["positionOrder"] > 0)]
+    results_df = results_df[
+        (results_df["positionOrder"] < 21) & (results_df["positionOrder"] > 0)
+    ]
     res_df = results_df[
         ["raceId", "driverId", "constructorId", "grid", "positionOrder"]
     ].copy()
@@ -100,3 +102,16 @@ def pre_proc(dataset_name):
     df_final = df_final
     df_final.to_csv(f"./model_datasets/{dataset_name}")
     return df_final
+
+
+# TODO: Podría ser pensado como un comportamiento de __str__
+def get_df_to_print(pred_data, driver_ids):
+    pred_df = pd.DataFrame(pred_data, columns=["result"])
+    driver_ids_df = pd.DataFrame(driver_ids, columns=["driverId"])
+    driver_info = pd.read_csv("./datasets/drivers.csv")
+    merged_df = pd.merge(driver_ids_df, driver_info, on="driverId", how="inner")
+    merged_df["driverName"] = merged_df["forename"] + " " + merged_df["surname"]
+    final_df = pd.concat([merged_df.reset_index(drop=True), pred_df], axis=1)
+    final_df = final_df[["driverName", "result"]].sort_values(by="result")
+
+    return final_df
