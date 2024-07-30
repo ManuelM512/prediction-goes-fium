@@ -1,4 +1,5 @@
 import pandas as pd
+from os import path
 
 
 def load_datasets():
@@ -83,7 +84,7 @@ def feature_engineering(df):
     return df
 
 
-def pre_proc(dataset_name):
+def pre_proc(dataset_path):
     constructors_df, drivers_df, races, results_df = load_datasets()
     # Extract only relevant information about the race for training purposes
     race_df = races[["raceId", "year", "round", "circuitId"]].copy()
@@ -100,11 +101,10 @@ def pre_proc(dataset_name):
     df_final = df.drop(labels=["raceId"], axis=1)
     df_final = df_final.dropna()
     df_final = df_final
-    df_final.to_csv(f"./model_datasets/{dataset_name}")
+    df_final.to_csv(dataset_path)
     return df_final
 
 
-# TODO: Podría ser pensado como un comportamiento de __str__
 def get_df_to_print(pred_data, driver_ids):
     pred_df = pd.DataFrame(pred_data, columns=["result"])
     driver_ids_df = pd.DataFrame(driver_ids, columns=["driverId"])
@@ -115,3 +115,12 @@ def get_df_to_print(pred_data, driver_ids):
     final_df = final_df[["driverName", "result"]].sort_values(by="result")
 
     return final_df
+
+
+def check_dataset_exists(dataset_path: str):
+    return path.exists(dataset_path)
+
+
+def load_dataframe(dataset_path: str):
+    df = pd.read_csv(dataset_path)
+    return df

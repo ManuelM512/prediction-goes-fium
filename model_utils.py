@@ -1,7 +1,31 @@
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 import numpy as np
-from dataset_prep import pre_proc
+from dataset_prep import pre_proc, check_dataset_exists, load_dataframe
+
+
+def choose_model(opt: int):
+    """
+    Choose and return a machine learning model based on the given option.
+
+    Parameters:
+    -----------
+    opt : int
+        An integer representing the model choice:
+        - 1: Multinomial Naive Bayes
+        - 2: Gradient Boosting Classifier
+        - 3: Random Forest Classifier
+    """
+    match opt:
+        case 1:
+            return MultinomialNB()
+        case 2:
+            return GradientBoostingClassifier()
+        case 3:
+            return RandomForestClassifier()
+        case _:
+            raise ValueError(f"Invalid option {opt}. Expected values are 1, 2, or 3.")
 
 
 def predict_unique(model, to_predict_df):
@@ -23,8 +47,7 @@ def predict_unique(model, to_predict_df):
     return predictions
 
 
-# TODO: Mejorar uso del nombre del dataset, y creación si no existe
-def train(dataset_name):
+def train(dataset_path: str, model_opt: int):
     features = [
         "year",
         "round",
@@ -36,13 +59,16 @@ def train(dataset_name):
         "Driver Top 3 Finish Percentage (Last Year)",
         "Constructor Top 3 Finish Percentage (Last Year)",
     ]
-    df = pre_proc(dataset_name)
+    if not check_dataset_exists(dataset_path):
+        df = pre_proc(dataset_path)
+    else:
+        df = load_dataframe(dataset_path)
     X = df[features]
     y = df.positionOrder.astype(int)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
-    model = MultinomialNB()
+    model = choose_model(model_opt)
     model.fit(X_train, y_train)
 
     return model

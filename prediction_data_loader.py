@@ -1,6 +1,7 @@
 import pandas as pd
 
 
+# TODO: La idea sería después cambiar a que esto se cargue directo desde jsons
 def get_data():
     year = 2024
     round_number = 14
@@ -109,3 +110,30 @@ def get_complementary_data(data: dict):
     )
 
     return data
+
+
+# TODO: No se por qué no lo puse directo con el get data jajaja
+def get_actual_position_order():
+    actual_results = [
+        1,
+        4,
+        20,
+        16,
+        7,
+        10,
+        2,
+        17,
+        19,
+        5,
+        12,
+        15,
+        18,
+        14,
+        9,
+        13,
+        3,
+        6,
+        11,
+        8,
+    ]
+    return actual_results
