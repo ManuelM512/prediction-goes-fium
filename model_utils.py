@@ -49,7 +49,7 @@ def predict_unique(model, to_predict_df):
 
     unique_position_orders = list(range(1, 21))
     predictions = []
-
+    # TODO: Make n iterations of this, in order to get an avg position for each driver
     # Iterate through each sample's predicted probabilities
     for i, prob in enumerate(probabilities):
         top_classes = np.argsort(prob)[::-1]
@@ -75,7 +75,6 @@ def get_model_name_by_opt(opt: int):
             raise ValueError(f"Invalid option {opt}. Expected values are 1, 2, or 3.")
 
 
-# TODO: Use experiment tracking here, take it out of predictioner
 def train(dataset_path: str, model_opt: int):
     features = [
         "year",

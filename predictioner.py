@@ -7,12 +7,13 @@ from prediction_data_loader import (
 from model_utils import predict_unique, train
 from mocked_models import mocked_train
 
+
 def positioner():
     dataset_folder = "./model_datasets/"
     # Next line will train the model, use optuna for hyperparameters and store it in MLFlow
     # loaded_model = train(f"{dataset_folder}test_model", 3)
     # This line only gets the mocked models with the hyperparameters already calculated
-    loaded_model = mocked_train(1, f"{dataset_folder}test_model")
+    loaded_model = mocked_train(2, f"{dataset_folder}test_model")
     race_data = get_data("2024_spa")
     # The dataset could have orderPosition in it, which is the target and not for train
     race_data_to_predict = race_data[
