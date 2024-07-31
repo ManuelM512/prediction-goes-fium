@@ -6,6 +6,7 @@ def get_data(race_name):
     return df_to_predict
 
 
+# TODO: Pls shorten it
 def get_complementary_data(data: dict):
     driver_ids = data["driverId"]
     year = data["year"][0]

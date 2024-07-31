@@ -28,6 +28,7 @@ def list_median(l: list):
 
 def get_metrics(actual, pred):
     dif_list = difference_in_pred(actual, pred)
+
     metric_dict = {
         "accuracy_score": accuracy_score(actual, pred),
         "precision_score": precision_score(actual, pred, average="weighted"),
@@ -50,7 +51,6 @@ def log_to_mlflow(model, model_name: str, metrics_dict: dict, params_dict: dict)
     return model_info
 
 
-def track_experiment(model, model_name, pred, actual):
+def track_experiment(model, model_name, pred, actual, params):
     metrics_dict = get_metrics(actual, pred)
-    params_dict = {"test_size": 0.2, "random_state": 42}
-    log_to_mlflow(model, model_name, metrics_dict, params_dict)
+    log_to_mlflow(model, model_name, metrics_dict, params)
