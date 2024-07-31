@@ -3,7 +3,7 @@
 ## Introduction
 This project aims to develop a machine learning model capable of predicting the position order of drivers in the next Formula 1 race. By leveraging historical race data and various features such as driver performance, team performance, the model will provide insights and predictions to help understand and anticipate the outcomes of upcoming races.
 <br>
-This project was realized as a way to get a hold of the vast world of Data science and Machine learning, with the constant help of Juan Kurucz telling me what could be a good approach or what technology to add next, it really helped me get a valuable insight into industry best practices.
+The project was carried out with the main objective of entering the world of Data Science and Machine Learning, with the constant help of Juan Kurucz, who guided me on the best approaches and new technologies to use. He always showed me how to proceed and the best way to do things.
 
 ## Technologies
 - Optuna
