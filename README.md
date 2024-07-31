@@ -1,13 +1,38 @@
-# F1 Race Position Prediction - WIP
+# F1 Race Position Prediction
 
 ## Introduction
-This project aims to develop a machine learning model capable of predicting the position order of drivers in the next Formula 1 race. By leveraging historical race data and various features such as driver performance, team performance, track characteristics, the model will provide insights and predictions to help understand and anticipate the outcomes of upcoming races. This predictive capability can be valuable for teams, analysts, and enthusiasts who are keen on making data-driven decisions and analyses.
+This project aims to develop a machine learning model capable of predicting the position order of drivers in the next Formula 1 race. By leveraging historical race data and various features such as driver performance, team performance, track characteristics, the model will provide insights and predictions to help understand and anticipate the outcomes of upcoming races.
+<br>
+This project was realized as a way to get a hold of the vast world of Data science and Machine learning, with the constant help of Juan Kurucz telling me what could be a good approach or what technology to add next, it really helped me get a valuable insight into industry best practices.
 
-## Technologies I want to use
-The project utilizes a range of technologies and tools to ensure accurate predictions, efficient model training, and effective experimentation tracking. Below are the key technologies used:
+## Technologies
+- Optuna
+- Sklearn
+- Pandas
+- MLFlow
+- Autogluon or FastAi (WIP)
+- Gradio (WIP)
 
-- **Hyperparameter Search**: To optimize the performance of the machine learning models, employing hyperparameter search techniques to find the best combination of parameters.
-- **MLflow**: This tool will be used for tracking experiments, managing the lifecycle of machine learning models, and keeping a detailed record of all experiments and their results.
-- **Gradio**: To create a user-friendly interface for interacting with the model, allowing users to input new race data and get position predictions.
-- **Random Forest and XGBoost**: These powerful ensemble learning algorithms will be used to build robust models for predicting race outcomes.
-- **FastAI or AutoGluon**: One of these high-level machine learning libraries will be used for building and training our models, taking advantage of their advanced features and ease of use.
+## What I learned
+
+### Data Cleaning and Preparation
+- **Importance of Data Quality**: Ensured the dataset was clean and free from inconsistencies, highlighting the importance of high-quality data. E.g., there were races from the past with more than 20 drivers, which ended in the model trying to predict in the range from 1 to n (being n>20) rather than 1 to 20.
+- **Feature Engineering**: Created meaningful features from raw data, understanding the critical role feature engineering plays in model performance, as I could see how the model improved with more recent and meaningful data.
+
+### Experiment Tracking with MLFlow
+- **Experiment Management**: Used MLFlow to track experiments, making it easier to compare different model runs and their respective parameters.
+- **Reproducibility**: Learned to maintain reproducibility of experiments by recording model configurations.
+
+### Hyperparameter Optimization with Optuna
+- **Optimization Techniques**: Leveraged Optuna for hyperparameter tuning, gaining insights into the benefits of automated optimization techniques.
+- **Efficiency**: Noted significant improvements in model performance by efficiently exploring the hyperparameter space.
+
+### Model Training and Evaluation
+- **Model Comparison**: Trained and evaluated multiple models, including Gradient Boosting Classifier, Random Forest Classifier, and Multinomial Naive Bayes.
+- **Performance Metrics**: Assessed models using appropriate metrics, learning to select the best model based on evaluation results rather than assumptions.
+
+### Practical Insights
+- **Iterative Process**: Recognized the iterative nature of machine learning projects, where continuous improvements and refinements lead to better outcomes.
+
+## Conclusion
+This project is nowhere near ending, and this was a common feeling all along the way. However, I'm not saying this in a bad way. As I advanced, my horizon broadened while also the scope of the project, wanting each iteration to improve what was already done, understanding something new that could be useful, it was a really exciting thing to do. Even where it seemed really distant the next thing, mostly as I lacked knowledge of the technologies, it was still an attractive challenge to take on.
