@@ -42,6 +42,6 @@ It will run a prediction of the Spa race, and print the results.
 This project is nowhere near ending, and this was a common feeling all along the way. However, I'm not saying this in a bad way. As I advanced, my horizon broadened while also the scope of the project, wanting each iteration to improve what was already done, understanding something new that could be useful, it was a really exciting thing to do. Even where it seemed really distant the next thing, mostly as I lacked knowledge of the technologies, it was still an attractive challenge to take on.
 
 ## References
-[Dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020)
+[Dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020) <br>
 I took plenty of references of EDA and data manipulation from [this kaggle post](https://www.kaggle.com/code/yanrogerweng/formula-1-race-prediction#Check-dataframe)
 
