@@ -45,3 +45,9 @@ This project is nowhere near ending, and this was a common feeling all along the
 [Dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020) <br>
 I took plenty of references of EDA and data manipulation from [this kaggle post](https://www.kaggle.com/code/yanrogerweng/formula-1-race-prediction#Check-dataframe)
 
+## Work to do / next steps
+- Improving the unique function to make it an avg. of the predicted position
+- Add more features. It is in need of more recent ones.
+- Refactor the code, as there is plenty of technical debt around.
+- Implement Gradio
+- Try using Autogluon / Fastai
