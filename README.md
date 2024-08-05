@@ -14,7 +14,7 @@ The project was carried out with the main objective of entering the world of Dat
 - Gradio (WIP)
 
 ## How to run
-Use poetry to manage the dependencies, and then run the "predictioner.py" file.
+Use <i>poetry</i> to manage the dependencies, and then run the "predictioner.py" file.
 It will run a prediction of the Spa race, and print the results.
 
 ## What I learned
